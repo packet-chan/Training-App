@@ -5,10 +5,7 @@ using System.Collections;
 using System.Text;
 using TMPro;
 
-// Native Galleryを正しく使うために、このusingディレクティブが必須です
-#if UNITY_ANDROID || UNITY_IOS
-using NativeGallery;
-#endif
+// 'using NativeGallery;' はクラス名なので不要。削除しました。
 
 public class MealLogger : MonoBehaviour
 {
@@ -20,7 +17,7 @@ public class MealLogger : MonoBehaviour
     [SerializeField] private GameObject loadingIndicator;
 
     [Header("API設定")]
-    [SerializeField] private string geminiApiKey = "YOUR_GEMINI_API_KEY"; // ここに自分のAPIキーを入力
+    [SerializeField] private string geminiApiKey; // YOUR_GEMINI_API_KEY
 
     // --- 内部で使う変数 ---
     private Texture2D selectedImageTexture;
@@ -34,35 +31,40 @@ public class MealLogger : MonoBehaviour
 
     void Start()
     {
+        // NativeGalleryはモバイル専用機能なので、PCエディタなどでエラーが出ないように
+        // #ifディレクティブで、AndroidかiOSの時だけボタンが機能するように設定します。
+#if UNITY_ANDROID || UNITY_IOS
         selectImageButton.onClick.AddListener(PickImageFromGallery);
+#else
+        // モバイル以外ではボタンを無効化し、メッセージを表示
+        selectImageButton.interactable = false;
+        resultText.text = "この機能はAndroidまたはiOSデバイスでのみ利用可能です。";
+#endif
         loadingIndicator.SetActive(false);
     }
 
+    // このメソッド全体も、モバイルプラットフォームでのみコンパイルされるように囲みます。
+#if UNITY_ANDROID || UNITY_IOS
     /// <summary>
-    /// ギャラリーから画像を選択する処理 (公式サンプル準拠版)
+    /// ギャラリーから画像を選択する処理
     /// </summary>
     private void PickImageFromGallery()
     {
-        // GetImageFromGalleryが権限要求も実行してくれる
+        // GetImageFromGalleryが権限要求も実行してくれます
         NativeGallery.GetImageFromGallery((path) =>
         {
-            // ユーザーが画像を選択せずに閉じた場合は、pathはnullになる
             if (string.IsNullOrEmpty(path))
             {
-                Debug.Log("画像が選択されませんでした。");
                 return;
             }
 
-            Debug.Log("選択された画像のパス: " + path);
-
-            // 前回のテクスチャがあれば破棄
             if (selectedImageTexture != null)
             {
                 Destroy(selectedImageTexture);
             }
 
-            // 選択された画像をテクスチャとして読み込み、プレビューに表示
-            selectedImageTexture = NativeGallery.LoadImageAtPath(path, 1024, false); // 最大サイズを1024pxに制限
+            // CPUからアクセスできるように、markAsNonReadableをfalseに設定
+            selectedImageTexture = NativeGallery.LoadImageAtPath(path, 1024, false);
             if (selectedImageTexture == null)
             {
                 resultText.text = "画像の読み込みに失敗しました。";
@@ -70,16 +72,16 @@ public class MealLogger : MonoBehaviour
             }
 
             photoPreview.texture = selectedImageTexture;
-            photoPreview.color = Color.white; // 画像を表示するためにRawImageを不透明にする
+            photoPreview.color = Color.white;
 
             resultText.text = "AIが解析中です...";
             loadingIndicator.SetActive(true);
 
-            // AIに画像を送信するコルーチンを開始
             StartCoroutine(UploadToGemini(selectedImageTexture));
 
         }, "食事の写真を選択");
     }
+#endif
 
     private IEnumerator UploadToGemini(Texture2D image)
     {
