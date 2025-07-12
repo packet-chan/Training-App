@@ -18,4 +18,8 @@ public static class DataManager
 
     // 過去全てのトレーニング履歴を保存するリスト
     public static List<WorkoutResult> history = new List<WorkoutResult>();
+
+
+    // ホーム画面に表示したいメッセージを一時的に保存する場所
+    public static string messageToHome = "";
 }
