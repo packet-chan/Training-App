@@ -91,26 +91,54 @@ public class MealLogger : MonoBehaviour
         string prompt = "この画像に写っている食べ物を分析し、料理名、総カロリー、PFCバランス（タンパク質、脂質、炭水化物）を日本語で教えてください。回答は必ず以下のJSON形式でお願いします: {\\\"food_name\\\": \\\"料理名\\\", \\\"calories\\\": カロリー数, \\\"protein\\\": タンパク質グラム数, \\\"fat\\\": 脂質グラム数, \\\"carbs\\\": 炭水化物グラム数}";
         string jsonPayload = $"{{\"contents\":[{{\"parts\":[{{\"text\":\"{prompt}\"}},{{\"inline_data\":{{\"mime_type\":\"image/jpeg\",\"data\":\"{base64Image}\"}}}}]}}]}}";
 
-        using (UnityWebRequest webRequest = new UnityWebRequest(url, "POST"))
+        // --- ▼▼▼ リトライ処理の追加 ▼▼▼ ---
+        int maxRetries = 3; // 最大3回まで試行
+        float retryDelay = 2.0f; // 失敗したら2秒待つ
+
+        for (int i = 0; i < maxRetries; i++)
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
-            webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            webRequest.downloadHandler = new DownloadHandlerBuffer();
-            webRequest.SetRequestHeader("Content-Type", "application/json");
-
-            yield return webRequest.SendWebRequest();
-
-            loadingIndicator.SetActive(false);
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest webRequest = new UnityWebRequest(url, "POST"))
             {
-                Debug.LogError("APIエラー: " + webRequest.error + "\n" + webRequest.downloadHandler.text);
-                resultText.text = "解析エラーが発生しました。";
+                byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+                webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                webRequest.downloadHandler = new DownloadHandlerBuffer();
+                webRequest.SetRequestHeader("Content-Type", "application/json");
+
+                yield return webRequest.SendWebRequest();
+
+                // 503エラー以外で失敗したか、または成功した場合
+                if (webRequest.responseCode != 503 || webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    // ここでループを抜けて、通常の結果処理に進む
+                    HandleApiResponse(webRequest);
+                    yield break;
+                }
+
+                // 503エラーで、まだリトライ回数が残っている場合
+                Debug.LogWarning($"API is overloaded. Retrying in {retryDelay} seconds... (Attempt {i + 1}/{maxRetries})");
+                yield return new WaitForSeconds(retryDelay);
             }
-            else
-            {
-                ParseAndDisplayResponse(webRequest.downloadHandler.text);
-            }
+        }
+        // --- ▲▲▲ リトライ処理ここまで ▲▲▲ ---
+
+        // すべてのリトライが失敗した場合
+        Debug.LogError("API failed after all retries.");
+        resultText.text = "サーバーが混み合っています。しばらくしてからお試しください。";
+        loadingIndicator.SetActive(false);
+    }
+
+    // レスポンス処理を別のメソッドに分離
+    private void HandleApiResponse(UnityWebRequest webRequest)
+    {
+        loadingIndicator.SetActive(false);
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("APIエラー: " + webRequest.error + "\n" + webRequest.downloadHandler.text);
+            resultText.text = "解析エラーが発生しました。";
+        }
+        else
+        {
+            ParseAndDisplayResponse(webRequest.downloadHandler.text);
         }
     }
 
