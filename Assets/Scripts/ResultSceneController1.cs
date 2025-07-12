@@ -12,28 +12,28 @@ public class ResultSceneController : MonoBehaviour
 
     void Start()
     {
-        // --- 1. ƒf[ƒ^ŠÇ—l‚©‚çÅV‚ÌŒ‹‰Ê‚ğó‚¯æ‚é ---
+        // --- 1. ãƒ‡ãƒ¼ã‚¿ç®¡ç†äººã‹ã‚‰æœ€æ–°ã®çµæœã‚’å—ã‘å–ã‚‹ ---
         WorkoutResult result = DataManager.latestResult;
 
-        // --- 2. ó‚¯æ‚Á‚½Œ‹‰Ê‚ğUI‚É•\¦ ---
+        // --- 2. å—ã‘å–ã£ãŸçµæœã‚’UIã«è¡¨ç¤º ---
         dateText.text = result.date;
         weightText.text = result.weight.ToString("F1") + " kg";
-        repsText.text = result.totalReps + " ‰ñ";
+        repsText.text = result.totalReps + " å›";
 
-        // --- 3. Š®—¹ƒ{ƒ^ƒ“‚Éˆ—‚ğ“o˜^ ---
+        // --- 3. å®Œäº†ãƒœã‚¿ãƒ³ã«å‡¦ç†ã‚’ç™»éŒ² ---
         completeButton.onClick.AddListener(OnCompleteButtonClicked);
     }
 
     /// <summary>
-    /// Š®—¹ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
+    /// å®Œäº†ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     void OnCompleteButtonClicked()
     {
-        // --- 1. ÅV‚ÌŒ‹‰Ê‚ğu—š—ğvƒŠƒXƒg‚É’Ç‰Á ---
+        // --- 1. æœ€æ–°ã®çµæœã‚’ã€Œå±¥æ­´ã€ãƒªã‚¹ãƒˆã«è¿½åŠ  ---
         DataManager.history.Add(DataManager.latestResult);
 
-        // --- 2. ƒz[ƒ€‰æ–Ê‚ÖˆÚ“® ---
-        Debug.Log("Œ‹‰Ê‚ğ—š—ğ‚É’Ç‰Á‚µAƒz[ƒ€‰æ–Ê‚ÖˆÚ“®‚µ‚Ü‚·B");
-        SceneManager.LoadScene("HomeScene"); // "HomeScreen"‚Í‚²©g‚ÌƒV[ƒ“–¼‚É
+        // --- 2. ãƒ›ãƒ¼ãƒ ç”»é¢ã¸ç§»å‹• ---
+        Debug.Log("çµæœã‚’å±¥æ­´ã«è¿½åŠ ã—ã€ãƒ›ãƒ¼ãƒ ç”»é¢ã¸ç§»å‹•ã—ã¾ã™ã€‚");
+        SceneManager.LoadScene("HomeScene"); // "HomeScreen"ã¯ã”è‡ªèº«ã®ã‚·ãƒ¼ãƒ³åã«
     }
 }

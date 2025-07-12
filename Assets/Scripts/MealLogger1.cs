@@ -5,24 +5,24 @@ using System.Collections;
 using System.Text;
 using TMPro;
 
-// 'using NativeGallery;' ‚ÍƒNƒ‰ƒX–¼‚È‚Ì‚Å•s—vBíœ‚µ‚Ü‚µ‚½B
+// 'using NativeGallery;' ã¯ã‚¯ãƒ©ã‚¹åãªã®ã§ä¸è¦ã€‚å‰Šé™¤ã—ã¾ã—ãŸã€‚
 
 public class MealLogger : MonoBehaviour
 {
-    // --- UnityƒGƒfƒBƒ^‚©‚çİ’è‚·‚é€–Ú ---
-    [Header("UIƒp[ƒc")]
+    // --- Unityã‚¨ãƒ‡ã‚£ã‚¿ã‹ã‚‰è¨­å®šã™ã‚‹é …ç›® ---
+    [Header("UIãƒ‘ãƒ¼ãƒ„")]
     [SerializeField] private Button selectImageButton;
     [SerializeField] private RawImage photoPreview;
     [SerializeField] private TextMeshProUGUI resultText;
     [SerializeField] private GameObject loadingIndicator;
 
-    [Header("APIİ’è")]
+    [Header("APIè¨­å®š")]
     [SerializeField] private string geminiApiKey; // YOUR_GEMINI_API_KEY
 
-    // --- “à•”‚Åg‚¤•Ï” ---
+    // --- å†…éƒ¨ã§ä½¿ã†å¤‰æ•° ---
     private Texture2D selectedImageTexture;
 
-    // --- APIƒŒƒXƒ|ƒ“ƒX‚ğŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX’è‹` ---
+    // --- APIãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹å®šç¾© ---
     [System.Serializable] private class GeminiResponse { public Candidate[] candidates; }
     [System.Serializable] private class Candidate { public Content content; }
     [System.Serializable] private class Content { public Part[] parts; }
@@ -31,26 +31,26 @@ public class MealLogger : MonoBehaviour
 
     void Start()
     {
-        // NativeGallery‚Íƒ‚ƒoƒCƒ‹ê—p‹@”\‚È‚Ì‚ÅAPCƒGƒfƒBƒ^‚È‚Ç‚ÅƒGƒ‰[‚ªo‚È‚¢‚æ‚¤‚É
-        // #ifƒfƒBƒŒƒNƒeƒBƒu‚ÅAAndroid‚©iOS‚Ì‚¾‚¯ƒ{ƒ^ƒ“‚ª‹@”\‚·‚é‚æ‚¤‚Éİ’è‚µ‚Ü‚·B
+        // NativeGalleryã¯ãƒ¢ãƒã‚¤ãƒ«å°‚ç”¨æ©Ÿèƒ½ãªã®ã§ã€PCã‚¨ãƒ‡ã‚£ã‚¿ãªã©ã§ã‚¨ãƒ©ãƒ¼ãŒå‡ºãªã„ã‚ˆã†ã«
+        // #ifãƒ‡ã‚£ãƒ¬ã‚¯ãƒ†ã‚£ãƒ–ã§ã€Androidã‹iOSã®æ™‚ã ã‘ãƒœã‚¿ãƒ³ãŒæ©Ÿèƒ½ã™ã‚‹ã‚ˆã†ã«è¨­å®šã—ã¾ã™ã€‚
 #if UNITY_ANDROID || UNITY_IOS
         selectImageButton.onClick.AddListener(PickImageFromGallery);
 #else
-        // ƒ‚ƒoƒCƒ‹ˆÈŠO‚Å‚Íƒ{ƒ^ƒ“‚ğ–³Œø‰»‚µAƒƒbƒZ[ƒW‚ğ•\¦
+        // ãƒ¢ãƒã‚¤ãƒ«ä»¥å¤–ã§ã¯ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ–ã—ã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º
         selectImageButton.interactable = false;
-        resultText.text = "‚±‚Ì‹@”\‚ÍAndroid‚Ü‚½‚ÍiOSƒfƒoƒCƒX‚Å‚Ì‚İ—˜—p‰Â”\‚Å‚·B";
+        resultText.text = "ã“ã®æ©Ÿèƒ½ã¯Androidã¾ãŸã¯iOSãƒ‡ãƒã‚¤ã‚¹ã§ã®ã¿åˆ©ç”¨å¯èƒ½ã§ã™ã€‚";
 #endif
         loadingIndicator.SetActive(false);
     }
 
-    // ‚±‚Ìƒƒ\ƒbƒh‘S‘Ì‚àAƒ‚ƒoƒCƒ‹ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚Å‚Ì‚İƒRƒ“ƒpƒCƒ‹‚³‚ê‚é‚æ‚¤‚ÉˆÍ‚İ‚Ü‚·B
+    // ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰å…¨ä½“ã‚‚ã€ãƒ¢ãƒã‚¤ãƒ«ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã§ã®ã¿ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã•ã‚Œã‚‹ã‚ˆã†ã«å›²ã¿ã¾ã™ã€‚
 #if UNITY_ANDROID || UNITY_IOS
     /// <summary>
-    /// ƒMƒƒƒ‰ƒŠ[‚©‚ç‰æ‘œ‚ğ‘I‘ğ‚·‚éˆ—
+    /// ã‚®ãƒ£ãƒ©ãƒªãƒ¼ã‹ã‚‰ç”»åƒã‚’é¸æŠã™ã‚‹å‡¦ç†
     /// </summary>
     private void PickImageFromGallery()
     {
-        // GetImageFromGallery‚ªŒ ŒÀ—v‹‚àÀs‚µ‚Ä‚­‚ê‚Ü‚·
+        // GetImageFromGalleryãŒæ¨©é™è¦æ±‚ã‚‚å®Ÿè¡Œã—ã¦ãã‚Œã¾ã™
         NativeGallery.GetImageFromGallery((path) =>
         {
             if (string.IsNullOrEmpty(path))
@@ -63,23 +63,23 @@ public class MealLogger : MonoBehaviour
                 Destroy(selectedImageTexture);
             }
 
-            // CPU‚©‚çƒAƒNƒZƒX‚Å‚«‚é‚æ‚¤‚ÉAmarkAsNonReadable‚ğfalse‚Éİ’è
+            // CPUã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‚ˆã†ã«ã€markAsNonReadableã‚’falseã«è¨­å®š
             selectedImageTexture = NativeGallery.LoadImageAtPath(path, 1024, false);
             if (selectedImageTexture == null)
             {
-                resultText.text = "‰æ‘œ‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½B";
+                resultText.text = "ç”»åƒã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
                 return;
             }
 
             photoPreview.texture = selectedImageTexture;
             photoPreview.color = Color.white;
 
-            resultText.text = "AI‚ª‰ğÍ’†‚Å‚·...";
+            resultText.text = "AIãŒè§£æä¸­ã§ã™...";
             loadingIndicator.SetActive(true);
 
             StartCoroutine(UploadToGemini(selectedImageTexture));
 
-        }, "H–‚ÌÊ^‚ğ‘I‘ğ");
+        }, "é£Ÿäº‹ã®å†™çœŸã‚’é¸æŠ");
     }
 #endif
 
@@ -88,12 +88,12 @@ public class MealLogger : MonoBehaviour
         string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + geminiApiKey;
         byte[] imageData = image.EncodeToJPG();
         string base64Image = System.Convert.ToBase64String(imageData);
-        string prompt = "‚±‚Ì‰æ‘œ‚ÉÊ‚Á‚Ä‚¢‚éH‚×•¨‚ğ•ªÍ‚µA—¿—–¼A‘ƒJƒƒŠ[APFCƒoƒ‰ƒ“ƒXiƒ^ƒ“ƒpƒN¿A‰¿A’Y…‰»•¨j‚ğ“ú–{Œê‚Å‹³‚¦‚Ä‚­‚¾‚³‚¢B‰ñ“š‚Í•K‚¸ˆÈ‰º‚ÌJSONŒ`®‚Å‚¨Šè‚¢‚µ‚Ü‚·: {\\\"food_name\\\": \\\"—¿—–¼\\\", \\\"calories\\\": ƒJƒƒŠ[”, \\\"protein\\\": ƒ^ƒ“ƒpƒN¿ƒOƒ‰ƒ€”, \\\"fat\\\": ‰¿ƒOƒ‰ƒ€”, \\\"carbs\\\": ’Y…‰»•¨ƒOƒ‰ƒ€”}";
+        string prompt = "ã“ã®ç”»åƒã«å†™ã£ã¦ã„ã‚‹é£Ÿã¹ç‰©ã‚’åˆ†æã—ã€æ–™ç†åã€ç·ã‚«ãƒ­ãƒªãƒ¼ã€PFCãƒãƒ©ãƒ³ã‚¹ï¼ˆã‚¿ãƒ³ãƒ‘ã‚¯è³ªã€è„‚è³ªã€ç‚­æ°´åŒ–ç‰©ï¼‰ã‚’æ—¥æœ¬èªã§æ•™ãˆã¦ãã ã•ã„ã€‚å›ç­”ã¯å¿…ãšä»¥ä¸‹ã®JSONå½¢å¼ã§ãŠé¡˜ã„ã—ã¾ã™: {\\\"food_name\\\": \\\"æ–™ç†å\\\", \\\"calories\\\": ã‚«ãƒ­ãƒªãƒ¼æ•°, \\\"protein\\\": ã‚¿ãƒ³ãƒ‘ã‚¯è³ªã‚°ãƒ©ãƒ æ•°, \\\"fat\\\": è„‚è³ªã‚°ãƒ©ãƒ æ•°, \\\"carbs\\\": ç‚­æ°´åŒ–ç‰©ã‚°ãƒ©ãƒ æ•°}";
         string jsonPayload = $"{{\"contents\":[{{\"parts\":[{{\"text\":\"{prompt}\"}},{{\"inline_data\":{{\"mime_type\":\"image/jpeg\",\"data\":\"{base64Image}\"}}}}]}}]}}";
 
-        // --- ¥¥¥ ƒŠƒgƒ‰ƒCˆ—‚Ì’Ç‰Á ¥¥¥ ---
-        int maxRetries = 3; // Å‘å3‰ñ‚Ü‚Ås
-        float retryDelay = 2.0f; // ¸”s‚µ‚½‚ç2•b‘Ò‚Â
+        // --- â–¼â–¼â–¼ ãƒªãƒˆãƒ©ã‚¤å‡¦ç†ã®è¿½åŠ  â–¼â–¼â–¼ ---
+        int maxRetries = 3; // æœ€å¤§3å›ã¾ã§è©¦è¡Œ
+        float retryDelay = 2.0f; // å¤±æ•—ã—ãŸã‚‰2ç§’å¾…ã¤
 
         for (int i = 0; i < maxRetries; i++)
         {
@@ -106,35 +106,35 @@ public class MealLogger : MonoBehaviour
 
                 yield return webRequest.SendWebRequest();
 
-                // 503ƒGƒ‰[ˆÈŠO‚Å¸”s‚µ‚½‚©A‚Ü‚½‚Í¬Œ÷‚µ‚½ê‡
+                // 503ã‚¨ãƒ©ãƒ¼ä»¥å¤–ã§å¤±æ•—ã—ãŸã‹ã€ã¾ãŸã¯æˆåŠŸã—ãŸå ´åˆ
                 if (webRequest.responseCode != 503 || webRequest.result == UnityWebRequest.Result.Success)
                 {
-                    // ‚±‚±‚Åƒ‹[ƒv‚ğ”²‚¯‚ÄA’Êí‚ÌŒ‹‰Êˆ—‚Éi‚Ş
+                    // ã“ã“ã§ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã¦ã€é€šå¸¸ã®çµæœå‡¦ç†ã«é€²ã‚€
                     HandleApiResponse(webRequest);
                     yield break;
                 }
 
-                // 503ƒGƒ‰[‚ÅA‚Ü‚¾ƒŠƒgƒ‰ƒC‰ñ”‚ªc‚Á‚Ä‚¢‚éê‡
+                // 503ã‚¨ãƒ©ãƒ¼ã§ã€ã¾ã ãƒªãƒˆãƒ©ã‚¤å›æ•°ãŒæ®‹ã£ã¦ã„ã‚‹å ´åˆ
                 Debug.LogWarning($"API is overloaded. Retrying in {retryDelay} seconds... (Attempt {i + 1}/{maxRetries})");
                 yield return new WaitForSeconds(retryDelay);
             }
         }
-        // --- £££ ƒŠƒgƒ‰ƒCˆ—‚±‚±‚Ü‚Å £££ ---
+        // --- â–²â–²â–² ãƒªãƒˆãƒ©ã‚¤å‡¦ç†ã“ã“ã¾ã§ â–²â–²â–² ---
 
-        // ‚·‚×‚Ä‚ÌƒŠƒgƒ‰ƒC‚ª¸”s‚µ‚½ê‡
+        // ã™ã¹ã¦ã®ãƒªãƒˆãƒ©ã‚¤ãŒå¤±æ•—ã—ãŸå ´åˆ
         Debug.LogError("API failed after all retries.");
-        resultText.text = "ƒT[ƒo[‚ª¬‚İ‡‚Á‚Ä‚¢‚Ü‚·B‚µ‚Î‚ç‚­‚µ‚Ä‚©‚ç‚¨‚µ‚­‚¾‚³‚¢B";
+        resultText.text = "ã‚µãƒ¼ãƒãƒ¼ãŒæ··ã¿åˆã£ã¦ã„ã¾ã™ã€‚ã—ã°ã‚‰ãã—ã¦ã‹ã‚‰ãŠè©¦ã—ãã ã•ã„ã€‚";
         loadingIndicator.SetActive(false);
     }
 
-    // ƒŒƒXƒ|ƒ“ƒXˆ—‚ğ•Ê‚Ìƒƒ\ƒbƒh‚É•ª—£
+    // ãƒ¬ã‚¹ãƒãƒ³ã‚¹å‡¦ç†ã‚’åˆ¥ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«åˆ†é›¢
     private void HandleApiResponse(UnityWebRequest webRequest)
     {
         loadingIndicator.SetActive(false);
         if (webRequest.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("APIƒGƒ‰[: " + webRequest.error + "\n" + webRequest.downloadHandler.text);
-            resultText.text = "‰ğÍƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B";
+            Debug.LogError("APIã‚¨ãƒ©ãƒ¼: " + webRequest.error + "\n" + webRequest.downloadHandler.text);
+            resultText.text = "è§£æã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
         }
         else
         {
@@ -156,16 +156,16 @@ public class MealLogger : MonoBehaviour
 
             FoodData foodData = JsonUtility.FromJson<FoodData>(foodJson);
 
-            resultText.text = $"—¿—–¼: {foodData.food_name}\n" +
-                              $"ƒJƒƒŠ[: {foodData.calories} kcal\n" +
-                              $"ƒ^ƒ“ƒpƒN¿: {foodData.protein} g\n" +
-                              $"‰¿: {foodData.fat} g\n" +
-                              $"’Y…‰»•¨: {foodData.carbs} g";
+            resultText.text = $"æ–™ç†å: {foodData.food_name}\n" +
+                              $"ã‚«ãƒ­ãƒªãƒ¼: {foodData.calories} kcal\n" +
+                              $"ã‚¿ãƒ³ãƒ‘ã‚¯è³ª: {foodData.protein} g\n" +
+                              $"è„‚è³ª: {foodData.fat} g\n" +
+                              $"ç‚­æ°´åŒ–ç‰©: {foodData.carbs} g";
         }
         catch (System.Exception e)
         {
-            Debug.LogError("JSON‚Ìƒp[ƒX‚É¸”s‚µ‚Ü‚µ‚½: " + e.Message + "\nRaw Response: " + jsonResponse);
-            resultText.text = "Œ‹‰Ê‚Ì‰ğÍ‚É¸”s‚µ‚Ü‚µ‚½B";
+            Debug.LogError("JSONã®ãƒ‘ãƒ¼ã‚¹ã«å¤±æ•—ã—ã¾ã—ãŸ: " + e.Message + "\nRaw Response: " + jsonResponse);
+            resultText.text = "çµæœã®è§£æã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
         }
     }
 }

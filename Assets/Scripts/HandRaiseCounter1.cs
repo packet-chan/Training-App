@@ -9,37 +9,37 @@ public class HandRaiseCounter : MonoBehaviour
 {
     public TextMeshProUGUI repCountText;
 
-    public TMP_Dropdown weightDropdown; // šƒCƒ“ƒXƒyƒNƒ^[‚Åd‚³‘I‘ğƒhƒƒbƒvƒ_ƒEƒ“‚ğİ’è
-    public Button finishButton;       // šƒCƒ“ƒXƒyƒNƒ^[‚ÅI—¹ƒ{ƒ^ƒ“‚ğİ’è
+    public TMP_Dropdown weightDropdown; // â˜…ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§é‡ã•é¸æŠãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã‚’è¨­å®š
+    public Button finishButton;       // â˜…ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§çµ‚äº†ãƒœã‚¿ãƒ³ã‚’è¨­å®š
 
     private enum HandState { DOWN, UP }
     private HandState currentState = HandState.DOWN;
 
     private int repCount = 0;
 
-    // ¥¥¥y•ÏX“_‡@zŒ‹‰Ê‚ğƒXƒŒƒbƒhŠÔ‚Åó‚¯“n‚·‚½‚ß‚Ì•Ï”‚ğ’Ç‰Á ¥¥¥
+    // â–¼â–¼â–¼ã€å¤‰æ›´ç‚¹â‘ ã€‘çµæœã‚’ã‚¹ãƒ¬ãƒƒãƒ‰é–“ã§å—ã‘æ¸¡ã™ãŸã‚ã®å¤‰æ•°ã‚’è¿½åŠ  â–¼â–¼â–¼
     private volatile int latestRepCount = 0;
     private volatile bool isCountUpdated = false;
 
     void Start()
     {
-        // I—¹ƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚çAFinishWorkoutƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·‚æ‚¤‚Éİ’è
+        // çµ‚äº†ãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã‚‰ã€FinishWorkoutãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã‚ˆã†ã«è¨­å®š
         finishButton.onClick.AddListener(FinishWorkout);
     }
 
 
-    // Updateƒƒ\ƒbƒh‚ğ’Ç‰Á‚µ‚Ü‚·B‚±‚ê‚ÍUnity‚ÌƒƒCƒ“ƒXƒŒƒbƒh‚Å–ˆƒtƒŒ[ƒ€Às‚³‚ê‚Ü‚·B
+    // Updateãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã—ã¾ã™ã€‚ã“ã‚Œã¯Unityã®ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã§æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å®Ÿè¡Œã•ã‚Œã¾ã™ã€‚
     private void Update()
     {
-        // ¥¥¥y•ÏX“_‡AzUI‚ÌXV‚ğUpdateƒƒ\ƒbƒh“à‚Ås‚¢‚Ü‚· ¥¥¥
+        // â–¼â–¼â–¼ã€å¤‰æ›´ç‚¹â‘¡ã€‘UIã®æ›´æ–°ã‚’Updateãƒ¡ã‚½ãƒƒãƒ‰å†…ã§è¡Œã„ã¾ã™ â–¼â–¼â–¼
         if (isCountUpdated)
         {
-            repCountText.text = latestRepCount + " ‰ñ";
-            isCountUpdated = false; // XV‚µ‚½‚çƒtƒ‰ƒO‚ğ–ß‚·
+            repCountText.text = latestRepCount + " å›";
+            isCountUpdated = false; // æ›´æ–°ã—ãŸã‚‰ãƒ•ãƒ©ã‚°ã‚’æˆ»ã™
         }
     }
 
-    // ‚±‚Ìƒƒ\ƒbƒh‚ÍƒTƒuƒXƒŒƒbƒh‚©‚çŒÄ‚Î‚ê‚Ü‚·
+    // ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚µãƒ–ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã°ã‚Œã¾ã™
     public void OnPoseLandmarksOutput(NormalizedLandmarks landmarks)
     {
 
@@ -63,38 +63,38 @@ public class HandRaiseCounter : MonoBehaviour
                 currentState = HandState.DOWN;
                 repCount++;
 
-                // ¥¥¥y•ÏX“_‡BzUI‚ğ’¼ÚXV‚¹‚¸A•Ï”‚ÉŒ‹‰Ê‚ğ•Û‘¶‚µAƒtƒ‰ƒO‚ğ—§‚Ä‚é ¥¥¥
+                // â–¼â–¼â–¼ã€å¤‰æ›´ç‚¹â‘¢ã€‘UIã‚’ç›´æ¥æ›´æ–°ã›ãšã€å¤‰æ•°ã«çµæœã‚’ä¿å­˜ã—ã€ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹ â–¼â–¼â–¼
                 latestRepCount = repCount;
                 isCountUpdated = true;
 
-                // Debug.Log‚Í‚Ç‚ÌƒXƒŒƒbƒh‚©‚ç‚Å‚àŒÄ‚×‚é‚Ì‚ÅA‚±‚±‚Å‚ÍOK
+                // Debug.Logã¯ã©ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã§ã‚‚å‘¼ã¹ã‚‹ã®ã§ã€ã“ã“ã§ã¯OK
                 Debug.Log("Rep counted on sub-thread: " + repCount);
             }
         }
     }
 
     /// <summary>
-    /// ƒgƒŒ[ƒjƒ“ƒOI—¹ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
+    /// ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°çµ‚äº†ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     public void FinishWorkout()
     {
-        // --- 1. Œ‹‰Ê‚ğ‚Ü‚Æ‚ß‚é ---
+        // --- 1. çµæœã‚’ã¾ã¨ã‚ã‚‹ ---
         WorkoutResult result = new WorkoutResult();
 
         result.date = DateTime.Now.ToString("yyyy/MM/dd");
 
-        // ƒhƒƒbƒvƒ_ƒEƒ“‚©‚ç‘I‘ğ‚³‚ê‚½ƒeƒLƒXƒgi—á: "5.0 kg"j‚ğæ“¾
+        // ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã‹ã‚‰é¸æŠã•ã‚ŒãŸãƒ†ã‚­ã‚¹ãƒˆï¼ˆä¾‹: "5.0 kg"ï¼‰ã‚’å–å¾—
         string selectedWeightText = weightDropdown.options[weightDropdown.value].text;
-        // " kg"‚Ì•”•ª‚ğíœ‚µ‚ÄA”’l‚É•ÏŠ·
+        // " kg"ã®éƒ¨åˆ†ã‚’å‰Šé™¤ã—ã¦ã€æ•°å€¤ã«å¤‰æ›
         result.weight = float.Parse(selectedWeightText.Replace(" kg", ""));
 
-        result.totalReps = latestRepCount; // ƒJƒEƒ“ƒg‚µ‚½ÅI‰ñ”‚ğƒZƒbƒg
+        result.totalReps = latestRepCount; // ã‚«ã‚¦ãƒ³ãƒˆã—ãŸæœ€çµ‚å›æ•°ã‚’ã‚»ãƒƒãƒˆ
 
-        // --- 2. Œ‹‰Ê‚ğuƒf[ƒ^ŠÇ—lv‚É—a‚¯‚é ---
+        // --- 2. çµæœã‚’ã€Œãƒ‡ãƒ¼ã‚¿ç®¡ç†äººã€ã«é ã‘ã‚‹ ---
         DataManager.latestResult = result;
 
-        // --- 3. Œ‹‰ÊŠm”FƒV[ƒ“‚ÖˆÚ“® ---
-        Debug.Log("ƒgƒŒ[ƒjƒ“ƒOI—¹IŒ‹‰Ê‚ğ•Û‘¶‚µAŒ‹‰ÊƒV[ƒ“‚ÖˆÚ“®‚µ‚Ü‚·B");
-        SceneManager.LoadScene("TrainingResultScene"); // "TrainingResultScene"‚Í‚²©g‚ÌƒV[ƒ“–¼‚É
+        // --- 3. çµæœç¢ºèªã‚·ãƒ¼ãƒ³ã¸ç§»å‹• ---
+        Debug.Log("ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°çµ‚äº†ï¼çµæœã‚’ä¿å­˜ã—ã€çµæœã‚·ãƒ¼ãƒ³ã¸ç§»å‹•ã—ã¾ã™ã€‚");
+        SceneManager.LoadScene("TrainingResultScene"); // "TrainingResultScene"ã¯ã”è‡ªèº«ã®ã‚·ãƒ¼ãƒ³åã«
     }
 }

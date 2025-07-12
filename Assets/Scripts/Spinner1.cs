@@ -6,7 +6,7 @@ public class Spinner : MonoBehaviour
 
     void Update()
     {
-        // Z²‚ğ’†S‚É–ˆƒtƒŒ[ƒ€‰ñ“]‚³‚¹‚é
+        // Zè»¸ã‚’ä¸­å¿ƒã«æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å›è»¢ã•ã›ã‚‹
         transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
     }
 }

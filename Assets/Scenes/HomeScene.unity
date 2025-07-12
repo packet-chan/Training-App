@@ -1172,7 +1172,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1956451896}
+      - m_Target: {fileID: 1956451898}
         m_TargetAssemblyTypeName: SceneNavigator, Assembly-CSharp
         m_MethodName: LoadScene
         m_Mode: 5
@@ -1440,7 +1440,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1956451896}
+      - m_Target: {fileID: 1956451898}
         m_TargetAssemblyTypeName: SceneNavigator, Assembly-CSharp
         m_MethodName: LoadScene
         m_Mode: 5
@@ -1490,6 +1490,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148160063}
   m_CullTransparentMesh: 1
+--- !u!1 &1209691983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8814605181257828886, guid: a8e9a805da1b3264b99637f74734a09d, type: 3}
+  m_PrefabInstance: {fileID: 340891640705019839}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1222578847
 GameObject:
   m_ObjectHideFlags: 0
@@ -2098,15 +2103,16 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1956451896 stripped
+--- !u!114 &1956451898
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3817382748280327569, guid: a8e9a805da1b3264b99637f74734a09d, type: 3}
-  m_PrefabInstance: {fileID: 340891640705019839}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1209691983}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c77c5d124b6d3847b54cdc246813453, type: 3}
+  m_Script: {fileID: 11500000, guid: 10ab2d621bb377c4189c4737a97e039c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &340891640705019839
@@ -2164,7 +2170,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8814605181257828886, guid: a8e9a805da1b3264b99637f74734a09d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1956451898}
   m_SourcePrefab: {fileID: 100100000, guid: a8e9a805da1b3264b99637f74734a09d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
